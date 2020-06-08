@@ -5,7 +5,6 @@ const bcrypt = require('bcryptjs');
 router.post('/signup', async (req, res) => {
     const {username, password, email} = req.body;
 
-
 ///hash password
 const salt = await bcrypt.genSalt(10);
 const hashPassword = await bcrypt.hash(password, salt);
@@ -41,6 +40,32 @@ const hashPassword = await bcrypt.hash(password, salt);
         }
     });
 });
+
+
+router.post('/login', async (req, res) => {
+    const {username, password} = req.body;
+    
+    //check if username exist
+    UserModel.findOne({username})
+    .then(response => {
+        if(response){
+            const validPass = bcrypt.compare(password, response.password)
+            .then(bresponse => {
+                if(validPass){
+                    res.send("Success")
+                }else{
+                    res.send({message:"incorrect username or password"})
+                }
+            })
+        }else{
+            res.send({message:"incorrect username or password"})
+        }
+    })
+    .catch(err => {
+        res.send(err)
+    })
+
+})
 
 
 
