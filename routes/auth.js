@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const UserModel = require('../models/user');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 router.post('/signup', async (req, res) => {
     const {username, password, email} = req.body;
@@ -52,7 +53,9 @@ router.post('/login', async (req, res) => {
             const validPass = bcrypt.compare(password, response.password)
             .then(bresponse => {
                 if(validPass){
-                    res.send("Success")
+                    //create and assign token
+                    const token = jwt.sign({_id: response._id}, process.env.TOKEN_SECRET);
+                    res.header('authToken', token).send(token);
                 }else{
                     res.send({message:"incorrect username or password"})
                 }
