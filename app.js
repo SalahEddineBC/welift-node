@@ -5,9 +5,16 @@ const mongoose = require('mongoose');
 
 //import routes
 const authRoute = require('./routes/auth');
-const postRoute = require('./routes/posts');
+const mainRoute = require('./routes/workout');
+const userRoute = require('./routes/user');
+
+
+var cors = require("cors");
+app.use(cors());
+
 
 dotenv.config();
+
 
 ///connect to DB
 mongoose.connect(process.env.DB_CONNECT , 
@@ -26,8 +33,9 @@ app.use(express.json());
 
 
 ///Route middleware
+app.use('/workouts', mainRoute);
 app.use('/auth', authRoute);
-app.use('/post', postRoute);
+app.use('/user', userRoute);
 
 
 

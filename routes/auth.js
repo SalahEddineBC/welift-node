@@ -44,10 +44,10 @@ const hashPassword = await bcrypt.hash(password, salt);
 
 
 router.post('/login', async (req, res) => {
-    const {username, password} = req.body;
+    const {email, password} = req.body;
     
     //check if username exist
-    UserModel.findOne({username})
+    UserModel.findOne({email:email})
     .then(response => {
         if(response){
             const validPass = bcrypt.compare(password, response.password)
@@ -55,7 +55,13 @@ router.post('/login', async (req, res) => {
                 if(validPass){
                     //create and assign token
                     const token = jwt.sign({_id: response._id}, process.env.TOKEN_SECRET);
-                    res.header('authToken', token).send(token);
+                    const toSend = {
+                        username: response.username,
+                        token,
+                        id: response.id
+                    }
+                    res.header('authToken', token)
+                    res.send(toSend)
                 }else{
                     res.send({message:"incorrect username or password"})
                 }
