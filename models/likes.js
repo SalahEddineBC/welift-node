@@ -13,7 +13,7 @@ const likesSchema = new mongoose.Schema({
     },
     likes:{
         type:Number,
-        default: 0
+        default: 0,
     }
   
 });

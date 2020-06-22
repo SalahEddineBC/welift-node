@@ -41,7 +41,7 @@ router.post('/new', verify ,(req, res) => {
 router.get('/all',(req, res) => {
    newWorkoutModel.find()
    .populate('workout_author', 'username')
-   .populate('likes_count')
+   .populate('likes_count', 'likes')
    .then(response => {
        res.send(response)
    })
@@ -70,7 +70,6 @@ router.post('/:id/like', verify, (req,res) => {
                 newWorkoutModel.findOneAndUpdate({workout_id})
                 .then(workoutresponse => {
                     workoutresponse.likes_count = likesresponse._id
-                    workoutresponse.liked_by_user = likesresponse.user_ids.includes(userID._id) ? true : false
                     workoutresponse.save()
                 }).catch(errworkout => res.status(500).send(errworkout))
             })
@@ -99,12 +98,7 @@ router.post('/:id/dislike', verify, (req,res) => {
 
     likesModel.findOneAndUpdate({workout_id}, {$pull: {'user_ids': userID._id}, '$inc': {likes: -1}})
     .then(response => {
-        res.send(response);
-        newWorkoutModel.findOneAndUpdate({workout_id})
-            .then(workoutresponse => {
-                workoutresponse.liked_by_user = response.user_ids.includes(userID._id) ? true : false
-                workoutresponse.save()
-            }).catch(errworkout => res.status(500).send(errworkout))
+        res.send(response)
     })
     .catch(err => {
         res.status(500).send(err)
