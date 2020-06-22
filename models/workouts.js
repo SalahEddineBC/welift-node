@@ -34,29 +34,20 @@ const workoutSchema = new mongoose.Schema({
     author_visible:{
         type:Boolean,
         default:true
-    }
-    ,
+    },
     date:{
         type:Date,
         default: Date.now
-    },
-    type: {
-        type: String
     },
     workout_description:{
         required:true,
         type:{}
     },
-    is_liked_by_user:{
+    likes:{
         type: Schema.Types.ObjectId,
-        ref:''
-    },
-    likes_count:{
-       
-    },
-    comments:{
-
+        ref:'Likes'
     }
+
 });
 
 module.exports = mongoose.model('Workout', workoutSchema);

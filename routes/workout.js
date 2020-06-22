@@ -50,30 +50,44 @@ router.get('/all',(req, res) => {
 
 
 ///like a workout
-router.post('/like', verify, (req,res) => {
+router.post('/:id/like', verify, (req,res) => {
     const userID = req.user;
-    const { workout_id } = req.body;
+    const workout_id  = req.params.id;
+
 
     likesModel.findOne({workout_id})
     .then(response => {
         if(response === null){
             const newLike = new likesModel({
-                user_ids:userID,
-                workout_id
+                user_ids:userID._id,
+                workout_id,
             })
             newLike.save()
-            res.status(200).send;
+            res.send(response)
         }else{
             response.user_ids = response.user_ids.concat(userID)
             response.save()
+            res.send(response)
         }
     })
     .catch(err => {
-        res.status(500).send
+        res.status(500).send(err)
     })
+})
 
 
+///remove like from a workout
+router.post('/:id/dislike', verify, (req,res) => {
+    const userID = req.user;
+    const workout_id  = req.params.id;
 
+    likesModel.findOneAndUpdate({workout_id}, {$pull: {'user_ids': userID._id }})
+    .then(response => {
+        res.send(response);
+    })
+    .catch(err => {
+        res.status(500).send(err)
+    })
 })
 
 ///get all the likes from a workout

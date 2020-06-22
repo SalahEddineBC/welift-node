@@ -8,9 +8,10 @@ const likesSchema = new mongoose.Schema({
         required: true
     },
     workout_id:{
-        type: String,
-        required: true
-    }
+        type: Schema.Types.ObjectId,
+        ref:'Workouts'
+    },
+  
 });
 
 module.exports = mongoose.model('Likes', likesSchema);
