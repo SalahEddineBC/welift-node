@@ -25,11 +25,12 @@ router.post('/new', verify ,(req, res) => {
             author_visible,
             type: "workout",
             workout_description,
-            workout_author: response._id
+            workout_author: response._id,
         });
         workout.save()
         .then(bresponse => {
             res.send(bresponse)
+            
         })
         .catch(err => res.send({message:"something when wrong when trying to create the workout"}))
    })   
@@ -37,9 +38,11 @@ router.post('/new', verify ,(req, res) => {
 
 
 ///get all the workouts
-router.get('/all',(req, res) => {    
+router.get('/all',(req, res) => {
+
    newWorkoutModel.find()
    .populate('workout_author', 'username')
+   .populate('likes_count', 'likes')
    .then(response => {
        res.send(response)
    })
@@ -65,6 +68,14 @@ router.post('/:id/like', verify, (req,res) => {
             })
             newLike.save()
             res.send(response)
+            .then(likesresponse => {
+                newWorkoutModel.findOneAndUpdate({workout_id})
+                .then(workoutresponse => {
+                    workoutresponse.likes_count = likesresponse._id
+                    workoutresponse.save()
+                }).catch(errworkout => res.status(500).send(errworkout))
+            })
+            .catch(errlikes => console.log(errlikes))
         }else{
             if(!response.user_ids.includes(userID._id)){
                 response.user_ids = response.user_ids.concat(userID)
@@ -96,17 +107,7 @@ router.post('/:id/dislike', verify, (req,res) => {
     })
 })
 
-///get all the likes from a workout
-router.get('/all/likes', (req,res) => {
-    const userID = req.user;
-    const { workout_id } = req.body;
-    
-    likesModel.find()
-    .then(response => {
-        console.log(response)
-    })
 
-})
 
 
 module.exports = router;

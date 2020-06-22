@@ -43,7 +43,7 @@ const workoutSchema = new mongoose.Schema({
         required:true,
         type:{}
     },
-    likes:{
+    likes_count:{
         type: Schema.Types.ObjectId,
         ref:'Likes'
     }
