@@ -37,9 +37,7 @@ router.post('/new', verify ,(req, res) => {
 
 
 ///get all the workouts
-router.get('/all',(req, res) => {
-    // const userID = req.user;
-    
+router.get('/all',(req, res) => {    
    newWorkoutModel.find()
    .populate('workout_author', 'username')
    .then(response => {
@@ -49,7 +47,9 @@ router.get('/all',(req, res) => {
 });
 
 
-///like a workout
+////************
+///// LIKE A WORKOUT 
+// *****************
 router.post('/:id/like', verify, (req,res) => {
     const userID = req.user;
     const workout_id  = req.params.id;
@@ -61,13 +61,19 @@ router.post('/:id/like', verify, (req,res) => {
             const newLike = new likesModel({
                 user_ids:userID._id,
                 workout_id,
+                likes: 1
             })
             newLike.save()
             res.send(response)
         }else{
-            response.user_ids = response.user_ids.concat(userID)
-            response.save()
-            res.send(response)
+            if(!response.user_ids.includes(userID._id)){
+                response.user_ids = response.user_ids.concat(userID)
+                response.likes = response.likes + 1
+                response.save()
+                res.send(response)
+            }else{
+                res.status(500).send({message:"duplicated id"})
+            }
         }
     })
     .catch(err => {
@@ -81,7 +87,7 @@ router.post('/:id/dislike', verify, (req,res) => {
     const userID = req.user;
     const workout_id  = req.params.id;
 
-    likesModel.findOneAndUpdate({workout_id}, {$pull: {'user_ids': userID._id }})
+    likesModel.findOneAndUpdate({workout_id}, {$pull: {'user_ids': userID._id}, '$inc': {likes: -1}})
     .then(response => {
         res.send(response);
     })

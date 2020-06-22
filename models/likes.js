@@ -11,6 +11,10 @@ const likesSchema = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref:'Workouts'
     },
+    likes:{
+        type:Number,
+        default: 0
+    }
   
 });
 
