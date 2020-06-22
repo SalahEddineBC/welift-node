@@ -46,6 +46,10 @@ const workoutSchema = new mongoose.Schema({
     likes_count:{
         type: Schema.Types.ObjectId,
         ref:'Likes'
+    },
+    liked_by_user:{
+        type:Boolean,
+        default:false
     }
 
 });
