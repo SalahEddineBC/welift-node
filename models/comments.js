@@ -2,19 +2,23 @@ const mongoose = require('mongoose');
 const Schema = require('mongoose').Schema;
 
 
-const likesSchema = new mongoose.Schema({
+const commentsSchema = new mongoose.Schema({
     workout_id:{
         type: Schema.Types.ObjectId,
         ref:'Workout'
     },
-    likes:{
+    total_comments:{
         type:Number,
         default: 0,
     },
-    user_ids:{
+    comments:{
         type:[String]
+    },
+    date:{
+        type: Date,
+        default: Date.now
     }
   
 });
 
-module.exports = mongoose.model('Likes', likesSchema);
+module.exports = mongoose.model('Comments', commentsSchema);

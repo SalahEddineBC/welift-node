@@ -15,6 +15,9 @@ const workoutSchema = new mongoose.Schema({
         type: [String],
         required: true,
     },
+    equipment:{
+        type: String,
+    },
     muscle_group:{
         type:[String],
         required: true
@@ -50,6 +53,10 @@ const workoutSchema = new mongoose.Schema({
     liked_by_user:{
         type:Boolean,
         default:false
+    },
+    comments:{
+        type: Schema.Types.ObjectId,
+        ref:'Comments'
     }
 
 });
