@@ -39,4 +39,4 @@ app.use('/user', userRoute);
 
 
 
-app.listen(5000, () => console.log('server is running'));
+app.listen(process.env.PORT || 5000, () => console.log('server is running'));
