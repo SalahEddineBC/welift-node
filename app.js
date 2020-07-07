@@ -40,7 +40,7 @@ app.use('/user', userRoute);
 ///heroku
     app.use(express.static('./frontend/build'));
     app.get('*', (req, res)  => {
-        res.sendFile(path.join(__dirname, '/frontend/build/index.html'));
+        res.sendFile('/frontend/build/index.html');
     })
 
 
