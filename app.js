@@ -37,13 +37,13 @@ app.use('/auth', authRoute);
 app.use('/user', userRoute);
 
 
-///heroku
-if(process.env.NODE_ENV === "production"){
-    app.use(express.static('./frontend/build'));
-    app.get('*', (req, res)  => {
-        res.sendFile(path.join(__dirname, '/frontend/build/index.html'));
-    })
-}
+// ///heroku
+// if(process.env.NODE_ENV === "production"){
+//     app.use(express.static('./frontend/build'));
+//     app.get('*', (req, res)  => {
+//         res.sendFile(path.join(__dirname, '/frontend/build/index.html'));
+//     })
+// }
 
 
 
