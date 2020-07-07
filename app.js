@@ -10,7 +10,7 @@ const mainRoute = require('./routes/workout');
 const userRoute = require('./routes/user');
 
 
-
+const port = process.env.PORT || 5000;
 
 var cors = require("cors");
 app.use(cors());
@@ -35,14 +35,14 @@ app.use('/auth', authRoute);
 app.use('/user', userRoute);
 
 
-///heroku
-if(process.env.NODE_ENV === "production"){
-    app.use(express.static('../frontend/build'));
-    app.get('*', (req, res)  => {
-        res.sendfile(path.join(__dirname, 'frontend', 'build', 'index.html'));
-    })
-}
+// ///heroku
+// if(process.env.NODE_ENV === "production"){
+//     app.use(express.static('../frontend/build'));
+//     app.get('*', (req, res)  => {
+//         res.sendfile(path.join(__dirname, 'frontend', 'build', 'index.html'));
+//     })
+// }
 
 
 
-app.listen(process.env.PORT || 5000, () => console.log('server is running'));
+app.listen(port, () => console.log('server is running'));
